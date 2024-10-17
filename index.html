@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Projects Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Reset default margins and padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Make the body take the entire viewport, but allow scrolling */
+        body,
+        html {
+            width: 100%;
+            min-height: 100%;
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow-y: auto;
+        }
+
+        #container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Style for the canvas */
+        canvas {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+            background-color: #161616;
+        }
+
+        /* Fullscreen section for the text */
+        .fullscreen-section {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: transparent;
+            position: relative;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .info-container {
+            text-align: left;
+            position: absolute;
+            top: 4em;
+            left: 5em;
+            padding: 20px;
+        }
+
+		/* Text styling */
+		.name {
+			font-size: 6rem; /* Make the name larger */
+			font-weight: bold;
+		}
+
+		.title {
+			font-size: 1.5rem; /* Make the title smaller */
+			margin-top: 8px;
+		}
+
+		.subtitle {
+			font-size: 1.5rem; /* Make the subtitle smaller to match the title */
+			margin-top: 4px;
+		}
+
+
+        /* Style for the links section */
+        .links {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        }
+
+        .links a {
+            color: white;
+            text-decoration: none;
+            margin-right: 15px;
+            display: inline-flex;
+            align-items: center;
+            transition: color 0.3s ease;
+        }
+
+        .links a:hover {
+            color: #dddddd;
+        }
+
+        .links a i {
+            font-size: 2rem;
+            margin-right: 8px;
+        }
+
+        .links a span {
+            font-size: 1.2rem;
+        }
+
+        /* Projects section styling */
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            position: relative;
+            text-align: center;
+        }
+
+        h2::after {
+            content: "";
+            display: block;
+            width: 100px;
+            height: 3px;
+            background-color: white;
+            margin: 10px auto;
+        }
+
+        /* Grid of project boxes */
+        .projects-container {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            padding-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .project-box {
+            width: 45%;
+            height: calc(45vw * 0.5625);
+            perspective: 1000px;
+            position: relative;
+            transition: box-shadow 0.3s ease-in-out;
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.4);
+            margin-bottom: 5em;
+            overflow: hidden;
+        }
+
+        .project-box .background-image {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px 10px 0 0;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .project-box:hover .background-image {
+            box-shadow: 0 0 60px rgba(255, 255, 255, 0.7);
+            transform: scale(1.05);
+        }
+
+        .project-box.centered {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .project-description {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 8px 12px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 5px;
+            z-index: 1;
+            text-align: left;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .scroll-button {
+            position: absolute;
+            bottom: 3em;
+            padding: 10px 20px;
+            font-size: 2.5rem;
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            transition: background-color 0.3s ease;
+        }
+
+        .scroll-button:hover {
+            background-color: #dddddd;
+        }
+
+        /* Experience section styling */
+        .experience-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .experience-container {
+            width: 65%;
+        }
+
+        .career-title {
+            font-size: 1.5rem;
+            margin-left: 15px;
+        }
+
+        .career-dates {
+            font-size: 1.2rem;
+            margin-left: auto;
+        }
+
+        .experience-box {
+            background-color: #3a3a3a;
+            color: #ffffff;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            display: block;
+        }
+
+        .experience-logo {
+            width: 5em;
+            height: 5em;
+            margin-right: 20px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .experience-title {
+            display: flex;
+            align-items: center;
+        }
+
+        .experience-box:hover {
+            background-color: #555;
+        }
+
+        .experience-details {
+            position: relative;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .experience-box.active .experience-details {
+            max-height: 600px;
+        }
+
+        .experience-expanded-box {
+            background-color: #222;
+            color: white;
+            margin-top: 10px;
+            padding: 20px;
+            border-radius: 10px;
+            width: 100%;
+            height: 300px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .experience-bottom {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.5);
+            margin-top: 10px;
+        }
+
+        .programming-languages {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .language-oval {
+            background-color: #ffffff0d;
+            color: #deba66;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            white-space: nowrap;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Certificates Section */
+        .certificates-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .certificates-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2em;
+            margin-bottom: 20px;
+        }
+
+        .certificate-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .certificate-box:hover {
+            transform: scale(1.05);
+        }
+
+        .certificate-image {
+            width: 10em;
+            height: 10em;
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            transition: box-shadow 0.3s ease-in-out;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .certificate-box p {
+            margin-top: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        /* Footer section styling */
+        .footer-section {
+            width: 100%;
+            text-align: center;
+            margin-top: 50px;
+            padding-bottom: 20px;
+        }
+
+        .footer-section h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .footer-line {
+            width: 80%;
+            height: 1px;
+            background-color: white;
+            margin: 10px auto;
+            opacity: 0.7;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            margin: 0 15px;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a i {
+            margin-right: 8px;
+            font-size: 1.5rem;
+        }
+
+        .footer-links a:hover {
+            color: #dddddd;
+        }
+
+        /* Ensure the section scrolls smoothly */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Floating Navigation Icons */
+        #floating-line {
+            position: fixed;
+            top: 10%;
+            right: 5%;
+            height: 75vh;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            width: 10px;
+            border-radius: 10px;
+            opacity: 0; /* Initial opacity for animation */
+            transition: opacity 1s ease-in-out;
+        }
+
+        .circle-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .icon {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.5);
+            transition: color 0.3s ease;
+        }
+
+        .icon.active {
+            color: white;
+        }
+
+        .circle-container:hover .icon {
+            color: white;
+        }
+
+        .circle-label {
+            color: white;
+            font-size: 1rem;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .circle-container:hover .circle-label,
+        .icon.active + .circle-label {
+            font-weight: bold;
+            opacity: 1;
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .modal.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .modal.hide {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .modal-content {
+            background-color: #333;
+            margin: 1% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 900px;
+            text-align: center;
+            color: #cbcbcb;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .close {
+            color: white;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #dddddd;
+        }
+
+        .modal-image {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        /* Unordered List within Experience Details */
+        .experience-expanded-box ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        .experience-expanded-box li {
+            margin-bottom: 8px;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: white;
+        }
+
+        .experience-expanded-box li:hover {
+            color: #ffcc00;
+        }
+
+        /* Fade-in animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            animation: fadeInUp 1s forwards;
+        }
+
+        .fade-in-delay-1 {
+            animation-delay: 0.5s;
+        }
+
+        .fade-in-delay-2 {
+            animation-delay: 1s;
+        }
+
+        .fade-in-delay-3 {
+            animation-delay: 1.5s;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Floating Navigation Line -->
+    <div id="floating-line" class="fade-in fade-in-delay-3">
+        <div class="circle-container">
+            <i class="fas fa-home icon" data-section="home"></i> <!-- Use Font Awesome icon -->
+            <span class="circle-label" data-section="home">Home</span>
+        </div>
+        <div class="circle-container">
+            <i class="fas fa-code icon" data-section="softwareSection"></i> <!-- Use Font Awesome icon -->
+            <span class="circle-label" data-section="softwareSection">Software Engineering</span>
+        </div>
+        <div class="circle-container">
+            <i class="fas fa-chart-line icon" data-section="projectsSection"></i> <!-- Use Font Awesome icon -->
+            <span class="circle-label" data-section="projectsSection">Finance/QR Projects</span>
+        </div>
+        <div class="circle-container">
+            <i class="fas fa-briefcase icon" data-section="experienceSection"></i> <!-- Use Font Awesome icon -->
+            <span class="circle-label" data-section="experienceSection">Experience</span>
+        </div>
+    </div>
+
+    <div id="container">
+        <!-- The canvas element -->
+        <canvas id="backgroundCanvas"></canvas>
+
+        <!-- Fullscreen transparent section for name and titles -->
+        <div id="home" class="fullscreen-section fade-in fade-in-delay-1">
+            <div class="info-container">
+                <div class="name">Daniel Shmir</div>
+                <div class="title">Financial Mathematics Student at Baruch College</div>
+                <div class="subtitle">Software Dev at The Rockefeller University</div>
+                <div class="links">
+                    <a href="#"><i class="fa-regular fa-file"></i> <span>Resume</span></a>
+                    <a href="https://www.linkedin.com/in/daniel-shmir/"><i class="fa-brands fa-linkedin"></i> <span>LinkedIn</span></a>
+                </div>
+            </div>
+
+            <!-- Scroll down button -->
+            <button class="scroll-button" onclick="scrollToProjects()">My Projects &#x2193;</button>
+        </div>
+
+        <!-- Software Engineering Projects section with underline -->
+        <h2 id="softwareSection" class="fade-in fade-in-delay-2">Software Engineering Projects</h2>
+        <div class="projects-container fade-in fade-in-delay-2">
+            <!-- First row with two images -->
+            <div class="project-box" onclick="openModal('softwareModal1')">
+                <div class="background-image" style="background-image: url('image2.png');"></div>
+                <div class="project-description">
+                    <p>Baruch Financial Quants and Engineers Club Website</p>
+                </div>
+            </div>
+            <div class="project-box" onclick="openModal('softwareModal2')">
+                <div class="background-image" style="background-image: url('image3.png');"></div>
+                <div class="project-description">
+                    <p>Random Walk Simulator with Ants</p>
+                </div>
+            </div>
+            <!-- Second row with one centered image -->
+            <div class="project-box centered" onclick="openModal('softwareModal3')">
+                <div class="background-image" style="background-image: url('image5.png');"></div>
+                <div class="project-description">
+                    <p>ArenaUnity Mobile App</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Finance/Quantitative Projects section with underline -->
+        <h2 id="projectsSection" class="fade-in fade-in-delay-2">Finance/Quantitative Projects</h2>
+        <div class="projects-container fade-in fade-in-delay-2">
+            <!-- First row with two images -->
+            <div class="project-box" onclick="openModal('financeModal1')">
+                <div class="background-image" style="background-image: url('image1.png');"></div>
+                <div class="project-description">
+                    <p>Sentiment Analysis Project</p>
+                </div>
+            </div>
+            <div class="project-box" onclick="openModal('financeModal2')">
+                <div class="background-image" style="background-image: url('Flowchart.png');"></div>
+                <div class="project-description">
+                    <p>Kalshi Election Correlation Time Series<br>(Work In Progress)</p>
+                </div>
+            </div>
+
+            <!-- Second row with one centered image -->
+            <div class="project-box centered" onclick="openModal('financeModal3')">
+                <div class="background-image" style="background-image: url('image4.png');"></div>
+                <div class="project-description">
+                    <p>Cointegration Analysis Tool</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Professional Experience Section -->
+        <div class="experience-section" id="experienceSection">
+            <h2>Experience</h2>
+
+            <div class="experience-container">
+                <!-- Experience 1 -->
+                <div class="experience-box active" onclick="toggleExperience(1)">
+                    <div class="experience-title">
+                        <div class="experience-logo" style="background-image: url('logo1.png');"></div>
+                        <span class="career-title">Software Developer at Rockefeller University</span>
+                        <span class="career-dates">June 2024 - Present</span>
+                    </div>
+                    <div class="experience-details" id="experience1" style="max-height: 600px;">
+                        <div class="experience-expanded-box">
+                            <ul>
+                                <li>Engineered a proprietary gene annotation tool using Python, PyQt5, and MySQL.</li>
+                                <li>Rebuilt the gene annotation application in C++ with Qt, achieving significant performance optimizations and improving scalability for broader use.</li>
+                                <li>Developed a custom program for processing and analyzing biological sequence data, streamlining contig assembly for genomic research.</li>
+                                <li>Visualized gene expression data using Seaborn and Matplotlib.</li>
+                                <li>Migrated databases from Cassandra to MySQL, restructuring to optimize storage and improving query performance.</li>
+                            </ul>
+                            <div class="experience-bottom">
+                                <div class="programming-languages">
+                                    <span class="language-oval">C++</span>
+                                    <span class="language-oval">Python</span>
+                                    <span class="language-oval">PyQt5</span>
+                                    <span class="language-oval">SQL</span>
+                                    <span class="language-oval">Cassandra</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience 2 -->
+                <div class="experience-box" onclick="toggleExperience(2)">
+                    <div class="experience-title">
+                        <div class="experience-logo" style="background-image: url('logo2.png');"></div>
+                        <span class="career-title">Software Engineer at the Airforce Research Laboratory</span>
+                        <span class="career-dates">June 2023 - Aug 2023</span>
+                    </div>
+                    <div class="experience-details" id="experience2">
+                        <div class="experience-expanded-box">
+                            <ul>
+                                <li>Designed and implemented flight dynamics and weapon mechanics to replicate real-world scenarios.</li>
+                                <li>Leveraged Unity's physics engine and 3D graphics capabilities to create visually compelling and physically accurate representations of aircraft, terrain, and structures.</li>
+                            </ul>
+                            <div class="experience-bottom">
+                                <div class="programming-languages">
+                                    <span class="language-oval">C#</span>
+                                    <span class="language-oval">SQL</span>
+                                    <span class="language-oval">Unity</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience 3 -->
+                <div class="experience-box" onclick="toggleExperience(3)">
+                    <div class="experience-title">
+                        <div class="experience-logo" style="background-image: url('logo3.png');"></div>
+                        <span class="career-title">Team Lead at Financial Quants and Engineers Club at Baruch College</span>
+                        <span class="career-dates">Jan 2023 - Present</span>
+                    </div>
+                    <div class="experience-details" id="experience3">
+                        <div class="experience-expanded-box">
+                            <ul>
+                                <li>Led a team that developed a news-sentiment analysis-based factor trading machine learning model trained on a variety of news articles and market factors, focused on estimating weekly time series returns for financial indices.</li>
+                                <li>Implemented a rolling window backtest with hyperparameter optimization for the time series model, applying a train-test split approach.</li>
+                                <li>Created a website that allows rapid cointegration analysis and visualization of two tickers' stock data.</li>
+                            </ul>
+                            <div class="experience-bottom">
+                                <div class="programming-languages">
+                                    <span class="language-oval">Python</span>
+                                    <span class="language-oval">Scikit Learn</span>
+                                    <span class="language-oval">SQL</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Certificates Section -->
+        <div class="certificates-section" id="certificatesSection">
+            <h2>Certificates</h2>
+            <div class="certificates-container">
+                <!-- Certificate 1 -->
+                <a href="https://portal.bloombergforeducation.com/certificates/iLTxWQErKacWp2najvWhkFFw" target="_blank" class="certificate-box">
+                    <div class="certificate-image" style="background-image: url('bloomberg.png');"></div>
+                    <p>Bloomberg Market <br>Concepts</p>
+                </a>
+
+                <!-- Certificate 2 -->
+                <a href="https://www.credly.com/badges/c887bfe3-f84f-4632-9735-aa5effd370d5/linked_in_profile" target="_blank" class="certificate-box">
+                    <div class="certificate-image" style="background-image: url('aws.png');"></div>
+                    <p>AWS Certified <br>Developer – Associate</p>
+                </a>
+
+                <!-- Certificate 3 -->
+                <a href="https://catalog-education.oracle.com/ords/certview/sharebadge?id=DD2E72C5D2B11F45D34E1A01551329D0E3EC5B97968B1A36F157BA4AA8CF5296" target="_blank" class="certificate-box">
+                    <div class="certificate-image" style="background-image: url('oracle.png');"></div>
+                    <p>Oracle Certified <br> Associate </p>
+                </a>
+            </div>
+            <div class="certificates-container">
+                <!-- Certificate 4 -->
+                <a href="https://www.credly.com/badges/1a9be0c3-5589-40f0-8fd5-05c5dbb14ab1/public_url" target="_blank" class="certificate-box">
+                    <div class="certificate-image" style="background-image: url('ibm.png');"></div>
+                    <p>IBM Machine Learning <br>Professional Certificate</p>
+                </a>
+
+                <!-- Certificate 5 -->
+                <a href="https://www.credly.com/badges/7b594149-980d-44c7-97b0-27f90a9c913f/public_url" target="_blank" class="certificate-box">
+                    <div class="certificate-image" style="background-image: url('google.png');"></div>
+                    <p>Google Data Analytics <br>Professional Certificate</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer Section -->
+        <div class="footer-section" id="footerSection">
+            <h2>Contact</h2>
+            <div class="footer-line"></div>
+            <div class="footer-links">
+                <a href="mailto:dshmir04@gmail.com"><i class="fa-regular fa-envelope"></i> Email</a>
+                <a href="https://www.linkedin.com/in/daniel-shmir/"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+            </div>
+        </div>
+
+        <!-- Software Engineering Projects Modals -->
+        <div id="softwareModal1" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('softwareModal1')">&times;</span>
+                <h2>Financial Quants & Engineers Club Website</h2>
+                <img src="raining.gif" alt="FQE Club Website" class="modal-image">
+                <p>
+                    Developed and maintain the website for the Financial Quants & Engineers Club, where we implement quantitative research models and papers.
+                </p>
+
+                <div class="links">
+                    <a href="https://baruchfqe.github.io/" target="_blank"><i class="fa-solid fa-link"></i> Live Website</a>
+                    <a href="https://github.com/BaruchFQE/BaruchFQE.github.io" target="_blank"><i class="fa-brands fa-github"></i> GitHub Repository</a>
+                </div>
+                <div class="experience-bottom">
+                    <div class="programming-languages">
+                        <span class="language-oval">HTML</span>
+                        <span class="language-oval">CSS</span>
+                        <span class="language-oval">JavaScript</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="softwareModal2" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('softwareModal2')">&times;</span>
+                <h2>Random Walk Simulator</h2>
+                <img src="antswalkin.gif" alt="Random Walk Simulation" class="modal-image">
+                <p>
+                    This project simulates the behavior of ants as they explore. The ants take a number of steps in a direction before randomly switching to a new direction, mimicking natural foraging behavior. Once they locate food, they walk a straight line home. This model showcases how such simple, rule-based movements can lead to efficient foraging patterns.
+                </p>
+                <div class="links">
+                    <a href="https://x-zhora-x.github.io/ants_random_walks/" target="_blank"><i class="fa-solid fa-link"></i> Live Simulation</a>
+                    <a href="https://github.com/x-Zhora-x/ants_random_walks" target="_blank"><i class="fa-brands fa-github"></i> GitHub Repository</a>
+                </div>
+                <div class="experience-bottom">
+                    <div class="programming-languages">
+                        <span class="language-oval">HTML</span>
+                        <span class="language-oval">CSS</span>
+                        <span class="language-oval">JavaScript</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="softwareModal3" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('softwareModal3')">&times;</span>
+                <h2>ArenaUnity - Sports Booking App</h2>
+                <div style="display: flex; gap: 10px; justify-content: center; align-items: center;">
+                    <img src="app1.png" alt="ArenaUnity App Screenshot 1" class="modal-image" style="width: 30%; border-radius: 10px;">
+                    <img src="app2.png" alt="ArenaUnity App Screenshot 2" class="modal-image" style="width: 30%; border-radius: 10px;">
+                    <img src="app3.png" alt="ArenaUnity App Screenshot 3" class="modal-image" style="width: 30%; border-radius: 10px;">
+                </div>
+                <p>
+                    I developed a sports booking app called <strong>ArenaUnity</strong>, which helps players connect to impromptu sports matches and find compatible teammates. The app is set to be released on the App Store soon and I've already won a competition for best s.
+                </p>
+                <div class="links">
+                    <a href="https://www.linkedin.com/posts/the-zahn-center_2024-venture-competition-winners-activity-7196268111476477952-ymZe?utm_source=share&utm_medium=member_desktop" target="_blank"><i class="fa-solid fa-trophy"></i> Competition Details</a>
+                    <a href="https://arenaunity.pythonanywhere.com/" target="_blank"><i class="fa-solid fa-link"></i> More about ArenaUnity</a>
+                </div>
+                <div class="experience-bottom">
+                    <div class="programming-languages">
+                        <span class="language-oval">React Native</span>
+                        <span class="language-oval">SQL</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Finance/Quantitative Projects Modals -->
+        <div id="financeModal1" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('financeModal1')">&times;</span>
+                <h2>Sentiment Analysis Project</h2>
+                <img src="image1.png" alt="Sentiment Analysis Project" class="modal-image">
+                <p>
+                    I'm working on a sentiment analysis project with my club where we scrape data from Twitter, Polymarket, Kalshi, and various financial news sources. We'll analyze this data to generate sentiment scores and then use ARIMA and LSTM models to perform time series analysis, aiming to predict stock price movements.
+                </p>
+                <div class="links">
+                    <a href="https://github.com/BaruchFQETeam/sentiment_analysis_24" target="_blank"><i class="fa-brands fa-github"></i> GitHub Repository</a>
+                </div>
+                <div class="experience-bottom">
+                    <div class="programming-languages">
+                        <span class="language-oval">Python</span>
+                        <span class="language-oval">Scikit-learn</span>
+                        <span class="language-oval">Keras</span>
+                        <span class="language-oval">Beautiful Soup</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="financeModal2" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('financeModal2')">&times;</span>
+                <h2>Kalshi Election Correlation Time Series<br>(Work In Progress)</h2>
+                <img src="Flowchart.png" alt="Kalshi Election Correlation Time Series" class="modal-image">
+                <p>
+                    I'm planning to use Cholesky decomposition and time series analysis to explore correlations between swing states in U.S. elections. The goal is to uncover patterns in how these states' results move together, which will(in theory)(allegedly) allow me to predict which ones are likely to "swing" in the same direction. This could reveal mispriced markets on Kalshi or Polymarket. I'll start by analyzing historical election data, build a covariance matrix, and run Monte Carlo simulations to model possible election outcomes. This approach should help me spot betting odds that don’t match the actual risks.
+                </p>
+                <div class="experience-bottom">
+                    <div class="programming-languages">
+                        <span class="language-oval">Python</span>
+                        <span class="language-oval">NumPy</span>
+                        <span class="language-oval">Pandas</span>
+                        <span class="language-oval">ARIMA</span>
+                        <span class="language-oval">Statsmodels</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="financeModal3" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('financeModal3')">&times;</span>
+                <h2>Cointegration Analysis Tool</h2>
+                <img src="image6.png" alt="Cointegration Analysis Tool" class="modal-image">
+                <div style="text-align: center; margin-top: 10px;">
+                    <p>
+                        \( Y_t = \alpha + \beta X_t + \epsilon_t \)
+                    </p>
+                    <p style="font-size: 0.9rem; color: #ccc;">
+                        <br>
+                        <br> \( Y_t \) = Dependent variable time series
+                        <br> \( X_t \) = Independent variable time series
+                        <br> \( \alpha \) = Intercept term
+                        <br> \( \beta \) = Cointegration coefficient (slope)
+                        <br> \( \epsilon_t \) = Error term (residuals)
+                    </p>
+                </div><br>
+                <p>
+                    Developed a site for cointegrated pairs trading analysis. This revealed the obvious limitations of the Engle-Granger test for cointegration.
+                </p>
+                <div class="links">
+                    <a href="https://cointegrationinfo.pythonanywhere.com/" target="_blank"><i class="fa-solid fa-link"></i> Live Website</a>
+                </div>
+                <div class="experience-bottom">
+                    <div class="programming-languages">
+                        <span class="language-oval">Python</span>
+                        <span class="language-oval">Flask</span>
+                        <span class="language-oval">NumPy</span>
+                        <span class="language-oval">Pandas</span>
+                        <span class="language-oval">JavaScript</span>
+                        <span class="language-oval">ChartJS</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Function to open the modal
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.classList.remove('hide'); // Remove any hide class if present
+        modal.classList.add('show'); // Add show class
+        modal.style.display = "block"; // Ensure the modal is displayed
+    }
+
+    // Function to close the modal
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.classList.remove('show'); // Remove show class
+        modal.classList.add('hide'); // Add hide class to trigger fade-out effect
+
+        // Wait for the transition to finish before fully hiding the modal
+        setTimeout(() => {
+            modal.style.display = "none";
+        }, 500); // Match this with the duration of the CSS transition
+    }
+
+    // Close the modal if the user clicks outside of it
+    window.onclick = function(event) {
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            if (event.target === modal) {
+                closeModal(modal.id);
+            }
+        });
+    }
+
+    // Function to toggle the visibility of the experience details
+    function toggleExperience(experienceNumber) {
+        // Get all experience details elements
+        const allExperiences = document.querySelectorAll('.experience-details');
+
+        // Loop through all experiences and close any that are open
+        allExperiences.forEach((exp, index) => {
+            if (index + 1 !== experienceNumber) {
+                exp.parentElement.classList.remove('active');
+                exp.style.maxHeight = '0';
+            }
+        });
+
+        // Toggle the selected experience
+        const selectedExperience = document.getElementById(`experience${experienceNumber}`);
+        if (selectedExperience.parentElement.classList.contains('active')) {
+            selectedExperience.parentElement.classList.remove('active');
+            selectedExperience.style.maxHeight = '0';
+        } else {
+            selectedExperience.parentElement.classList.add('active');
+            selectedExperience.style.maxHeight = selectedExperience.scrollHeight + 'px';
+        }
+    }
+
+    // Scroll smoothly to the projects section
+    function scrollToProjects() {
+        const projectsSection = document.getElementById("softwareSection");
+        projectsSection.scrollIntoView({ behavior: "smooth" });
+    }
+
+    // Define sections with IDs and corresponding line lengths
+    const sections = [
+        { id: 'home', linePercentage: 0 },
+        { id: 'softwareSection', linePercentage: 33 },
+        { id: 'projectsSection', linePercentage: 66 },
+        { id: 'experienceSection', linePercentage: 100 },
+    ];
+
+    // Function to handle scroll events
+    function handleScroll() {
+        const floatingLine = document.getElementById('floating-line');
+        const scrollPosition = window.scrollY || window.pageYOffset;
+
+        // Check which section is active based on scroll position
+        sections.forEach((section, index) => {
+            const sectionElement = document.getElementById(section.id);
+            const sectionTop = sectionElement.offsetTop;
+            const sectionHeight = sectionElement.offsetHeight;
+
+            // If the section is in view (top passed but not the bottom), set the line length and highlight the icon
+            if (scrollPosition >= sectionTop - window.innerHeight / 2 &&
+                scrollPosition < sectionTop + sectionHeight - window.innerHeight / 2) {
+                setFloatingLineLength(section.linePercentage);
+                activateIcon(index);
+            }
+        });
+    }
+
+    // Set the length of the floating line based on the percentage
+    function setFloatingLineLength(percentage) {
+        const floatingLine = document.getElementById('floating-line');
+        floatingLine.style.background = `linear-gradient(to bottom, rgba(255, 255, 255, 0.2) ${percentage}%, rgba(255, 255, 255, 0.05) ${percentage}%)`;
+    }
+
+    // Highlight the active icon and remove highlight from others
+    function activateIcon(activeIndex) {
+        const icons = document.querySelectorAll('.icon');
+        const labels = document.querySelectorAll('.circle-label');
+        icons.forEach((icon, index) => {
+            if (index === activeIndex) {
+                icon.classList.add('active');
+                labels[index].classList.add('active');
+            } else {
+                icon.classList.remove('active');
+                labels[index].classList.remove('active');
+            }
+        });
+    }
+
+    // Scroll to the section when an icon or label is clicked
+    const icons = document.querySelectorAll('.icon');
+    const labels = document.querySelectorAll('.circle-label');
+    const clickableElements = [...icons, ...labels];
+    clickableElements.forEach(element => {
+        element.addEventListener('click', () => {
+            const sectionId = element.getAttribute('data-section');
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+
+    // Initialize the line and icons on page load
+    window.addEventListener('load', () => {
+        handleScroll(); // Initialize based on the initial scroll position
+    });
+
+    // Attach the scroll event listener
+    window.addEventListener('scroll', handleScroll);
+</script>
+
+
+    <script src="circles.js"></script>
+</body>
+
+</html>

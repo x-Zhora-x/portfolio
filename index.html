@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daniel Shmir Portfolio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         /* Reset default margins and padding */
@@ -641,7 +640,7 @@
         <div class="projects-container fade-in fade-in-delay-2">
             <!-- First row with two images -->
             <div class="project-box" onclick="openModal('financeModal1')">
-                <div class="background-image" style="background-image: url('title.png');"></div>
+                <div class="background-image" style="background-image: url('title.PNG');"></div>
                 <div class="project-description">
                     <p>Mean Reverting Portfolio Project</p>
                 </div>
@@ -866,22 +865,23 @@
         <!-- Finance/Quantitative Projects Modals -->
         <div id="financeModal1" class="modal">
             <div class="modal-content">
-                <h2>Sentiment Analysis Project</h2>
-                <img src="image1.png" alt="Sentiment Analysis Project" class="modal-image">
+                <h2>Mean Reverting Portfolio Project</h2>
+                <img src="balance.svg" alt="Mean Reversion Graph" class="modal-image">
                 <p>
-                    I'm working on a sentiment analysis project with my club where we scrape data from Twitter, Polymarket, Kalshi, and various financial news sources. We'll analyze this data to generate sentiment scores and then use ARIMA and LSTM models to perform time series analysis, aiming to predict stock price movements.
+                    I'm working on designing and implementing a mean-reverting portfolio optimization strategy through semi-definite programming, effectively reducing portfolio predictability to achieve mean reversion.
                 </p>
                 <div class="links">
                     <a href="https://github.com/BaruchFQETeam/sentiment_analysis_24" target="_blank"><i class="fa-brands fa-github"></i> GitHub Repository</a>
                 </div>
-                <div class="experience-bottom">
-                    <div class="programming-languages">
-                        <span class="language-oval">Python</span>
-                        <span class="language-oval">Scikit-learn</span>
-                        <span class="language-oval">Keras</span>
-                        <span class="language-oval">Beautiful Soup</span>
-                    </div>
-                </div>
+	        <div class="experience-bottom">
+	            <div class="programming-languages">
+	                <span class="language-oval">Python</span>
+	                <span class="language-oval">NumPy</span>
+	                <span class="language-oval">Pandas</span>
+	                <span class="language-oval">CVXPY</span>
+	                <span class="language-oval">Matplotlib</span>
+	            </div>
+	        </div>
             </div>
         </div>
 
